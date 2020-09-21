@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://Heth:Gala567@cluster0.kklpg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    "jwtSecret": "Hethgala"
+}

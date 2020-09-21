@@ -1,7 +1,17 @@
 const express = require('express')
+const connectDB = require('./config/db');
 
 const app = express()
 
-app.listen(5000, () => {
-    console.log('Hey! listening to you on port 5000')
+connectDB();
+
+app.use(express.json({ extended: false }));
+
+app.use('/api/users', require('./routes/user'));
+
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Hey! listening to you on port ${PORT}`)
 })
