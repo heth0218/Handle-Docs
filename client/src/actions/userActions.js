@@ -1,4 +1,4 @@
-import { REGISTER_USER, USER_ERROR, LOGIN_USER, LOGOUT } from './types'
+import { REGISTER_USER, USER_ERROR, LOGIN_USER, GET_USER, LOGOUT } from './types'
 import axios from 'axios'
 import setAuthToken from '../utils/setAuthToken'
 
@@ -58,5 +58,24 @@ export const loginUser = (user) => async dispatch => {
 export const logout = () => {
     return {
         type: LOGOUT
+    }
+}
+//Load User
+export const loadUser = () => async dispatch => {
+    if (localStorage.token) {
+        setAuthToken(localStorage.token)
+    }
+    try {
+        const res = await axios.get('/api/users/');
+        console.log(res.data)
+        dispatch({
+            type: GET_USER,
+            payload: res.data
+        })
+    } catch (error) {
+        dispatch({
+            type: USER_ERROR,
+            payload: error.response.statusText
+        })
     }
 }

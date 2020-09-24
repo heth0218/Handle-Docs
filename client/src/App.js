@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
+import Navbar from './components/layout/Navbar';
 
 function App() {
   useEffect(() => {
@@ -16,8 +17,9 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
+        <Navbar />
         <Switch>
-          <Route exact path='/' component={Login} />
+          <Route exact path='/login' component={Login} />
           <Route exact path='/register' component={Register} />
         </Switch>
       </Router>

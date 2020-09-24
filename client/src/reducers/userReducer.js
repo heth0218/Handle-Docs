@@ -1,4 +1,4 @@
-import { REGISTER_USER, USER_ERROR, LOGIN_USER, LOGOUT } from '../actions/types';
+import { REGISTER_USER, GET_USER, USER_ERROR, LOGIN_USER, LOGOUT } from '../actions/types';
 
 const initialState = {
     user: null,
@@ -28,7 +28,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 user: null,
-                isAuthenticated: false
+                isAuthenticated: false,
+                error: null,
+                current: null
+            }
+        case GET_USER:
+            return {
+                ...state,
+                user: action.payload,
+                isAuthenticated: true,
+                current: action.payload
             }
         default:
             return { ...state }
