@@ -7,7 +7,9 @@ connectDB();
 
 app.use(express.json({ extended: false }));
 app.use('/public', express.static('public'));
+
 app.use('/api/users', require('./routes/user'));
+app.use('/api/newdocs', require('./routes/newDocs'));
 
 
 const PORT = process.env.PORT || 5000;
