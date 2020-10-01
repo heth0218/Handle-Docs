@@ -8,7 +8,7 @@ import store from './store';
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import Navbar from './components/layout/Navbar';
-
+import File from './components/File'
 function App() {
   useEffect(() => {
     //Initializes materialize js
@@ -21,6 +21,8 @@ function App() {
         <Switch>
           <Route exact path='/login' component={Login} />
           <Route exact path='/register' component={Register} />
+          <Route exact path='/file' component={File} />
+
         </Switch>
       </Router>
     </Provider>

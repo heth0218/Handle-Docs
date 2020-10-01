@@ -6,7 +6,7 @@ const app = express()
 connectDB();
 
 app.use(express.json({ extended: false }));
-
+app.use('/public', express.static('public'));
 app.use('/api/users', require('./routes/user'));
 
 

@@ -12,6 +12,7 @@ const Register = ({ registerUser, isAuthenticated }) => {
         password: '',
         password2: ''
     })
+    const [imageUrl, setImageUrl] = useState();
     let history = useHistory()
 
     useEffect(() => {
@@ -25,6 +26,10 @@ const Register = ({ registerUser, isAuthenticated }) => {
 
     const { name, email, password, password2 } = user
 
+    const onFileChange = (e) => {
+        setImageUrl(e.target.files[0]);
+    }
+
     const onChange = e => setUser({ ...user, [e.target.name]: e.target.value })
 
     const onSubmit = e => {
@@ -36,7 +41,17 @@ const Register = ({ registerUser, isAuthenticated }) => {
         }
         else {
             console.log(name, email, password, password2);
-            registerUser({ name, email, password });
+
+            const formData = new FormData()
+            const item = {
+                name, email, password
+            }
+            for (var key in item) {
+                formData.append(key, item[key]);
+            }
+            console.log(imageUrl)
+            formData.append('imageUrl', imageUrl);
+            registerUser(formData);
         }
         e.preventDefault();
     }
@@ -70,6 +85,10 @@ const Register = ({ registerUser, isAuthenticated }) => {
                                         <div className="material-icons prefix">lock</div>
                                         <input required type="password" name="password2" value={password2} id="password2" onChange={onChange} />
                                         <label className="white-text" for="password2">Confirm Password</label>
+                                    </div>
+                                    <h4>Please insert your profile picture here!</h4>
+                                    <div className="form-group">
+                                        <input type="file" onChange={onFileChange} />
                                     </div>
                                     <input type="submit" value="Register" onClick={onSubmit}
                                         className="btn btn-large btn-extended waves-effect waves-grey white black-text" />

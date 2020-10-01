@@ -15,6 +15,7 @@ module.exports = async (req, res, next) => {
 
     const decoded = jwt.verify(token, config.get('jwtSecret'))
     const user = await User.findById(decoded.user.id)
+    req.user = user;
     res.locals.user = user
     next();
 }

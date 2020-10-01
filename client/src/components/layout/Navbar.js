@@ -35,12 +35,16 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
                                             <span>
                                                 &nbsp;&nbsp;&nbsp;Hello, {user.name}
                                             </span>
-                                        </li>
+                                        </li>&nbsp;&nbsp;
+
                                         <li>
                                             <a onClick={onLogout} href='#!'>
                                                 <i className="fas fa-sign-out-alt"></i>
                                                 <span className="hide-sm">Logout</span>
                                             </a>
+                                        </li>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <li>
+                                            <img src={user.imageUrl} alt="" height="50" width="50" style={{ marginTop: 5 }} className="circle"></img>
                                         </li>
                                     </Fragment>
                                 ) : (
