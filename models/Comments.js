@@ -7,7 +7,7 @@ const Comment = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: User
     },
-    on: {
+    model: {
         type: mongoose.Schema.Types.ObjectId,
         ref: NewDoc
     },
