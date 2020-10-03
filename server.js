@@ -11,6 +11,7 @@ app.use('/public', express.static('public'));
 app.use('/api/users', require('./routes/user'));
 app.use('/api/newdocs', require('./routes/newDocs'));
 app.use('/api/comments', require('./routes/comments'));
+app.use('/api/editedDocs', require('./routes/editedDocs'));
 
 
 const PORT = process.env.PORT || 5000;

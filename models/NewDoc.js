@@ -26,6 +26,9 @@ const NewDoc = mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: User
+    },
+    imageUrl: {
+        type: String
     }
 
 });
