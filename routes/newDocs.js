@@ -55,7 +55,7 @@ router.post('/', auth, async (req, res) => {
 //Get all docs
 router.get('/getall', auth, async (req, res) => {
     try {
-        const docs = await NewDoc.find({});
+        const docs = await NewDoc.find({}).populate('author', 'name');
 
         if (!docs) {
             return res.status(404).send({ msg: 'No docs find in db' })
