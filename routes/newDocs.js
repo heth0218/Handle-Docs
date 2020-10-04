@@ -52,6 +52,21 @@ router.post('/', auth, async (req, res) => {
     }
 })
 
+//Get all docs
+router.get('/getall', auth, async (req, res) => {
+    try {
+        const docs = await NewDoc.find({});
+
+        if (!docs) {
+            return res.status(404).send({ msg: 'No docs find in db' })
+        }
+        res.status(200).send(docs);
+    } catch (error) {
+        res.status(500).send({ msg: error.message })
+
+    }
+})
+
 //Get a documentation via id
 router.get('/:id', auth, async (req, res) => {
     try {
