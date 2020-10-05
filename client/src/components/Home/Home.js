@@ -29,8 +29,9 @@ const Home = (props) => {
             color="primary"
             aria-label="add"
             style={{ float: "right", marginRight: "20px" }}
+            onClick={createNewDocHandler}
           >
-            <AddIcon onClick={createNewDocHandler} />
+            <AddIcon />
           </Fab>
         ) : null
       ) : null}
