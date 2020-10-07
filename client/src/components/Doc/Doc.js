@@ -54,10 +54,11 @@ const Doc = (props) => {
     setOpen(dup);
   };
 
-  const openHandler = (index) => {
+  const openHandler = (index, docText) => {
     let dup = [...open];
     dup[index] = true;
     setOpen(dup);
+    setEditedText(docText)
   };
 
   const closeHandler = (index) => {
@@ -140,6 +141,7 @@ const Doc = (props) => {
               className={classes.root}
               style={{ display: "block" }}
               onChange={(event) => typingHandler(event)}
+              value={editedText}
             />
             <IconButton onClick={() => editHandler(index)}>
               <CheckIcon style={{ color: "green" }} />
@@ -149,29 +151,29 @@ const Doc = (props) => {
             </IconButton>
           </div>
         ) : (
-          <Card
-            key={doc._id}
-            className={classes.root}
-            style={{
-              backgroundColor: "teal",
-              color: "white",
-              fontSize: "25px",
-            }}
-          >
-            <CardContent>
-              <Typography>{doc.text}</Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                style={{ color: "lightgreen" }}
-                onClick={() => openHandler(index)}
-              >
-                Edit
+            <Card
+              key={doc._id}
+              className={classes.root}
+              style={{
+                backgroundColor: "teal",
+                color: "white",
+                fontSize: "25px",
+              }}
+            >
+              <CardContent>
+                <Typography>{doc.text}</Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  style={{ color: "lightgreen" }}
+                  onClick={() => openHandler(index, doc.text)}
+                >
+                  Edit
               </Button>
-            </CardActions>
-          </Card>
-        );
+              </CardActions>
+            </Card>
+          );
       })}
     </div>
   ) : null;
