@@ -1,8 +1,7 @@
-import { FETCH_ALL_DOCS, CREATE_NEW_DOC, FETCH_DOC } from "../actions/types";
+import { FETCH_ALL_DOCS, CREATE_NEW_DOC } from "../actions/types";
 
 const initialState = {
   docs: [],
-  selectedDoc: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -11,11 +10,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         docs: action.payload,
-      };
-    case FETCH_DOC:
-      return {
-        ...state,
-        selectedDoc: action.payload,
       };
     case CREATE_NEW_DOC:
       return state;

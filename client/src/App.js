@@ -11,6 +11,7 @@ import File from "./components/File";
 import Doc from "./components/Doc/Doc";
 import Home from "./components/Home/Home";
 import NewDoc from "./components/NewDoc/NewDoc";
+import EditedDoc from "./components/EditedDoc/EditedDoc";
 import { loadUser } from "./actions/userActions";
 
 function App(props) {
@@ -27,6 +28,7 @@ function App(props) {
         <Route exact path="/register" component={Register} />
         <Route exact path="/file" component={File} />
         <Route exact path="/newDoc" component={NewDoc} />
+        <Route exact path="/editedDoc" component={EditedDoc} />
         <Route exact path="/" component={Home} />
         <Route exact path="/:id" component={Doc} />
       </Switch>
