@@ -58,7 +58,7 @@ const Doc = (props) => {
     let dup = [...open];
     dup[index] = true;
     setOpen(dup);
-    setEditedText(docText)
+    setEditedText(docText);
   };
 
   const closeHandler = (index) => {
@@ -103,11 +103,9 @@ const Doc = (props) => {
         _id: selectedDoc.doc[index]._id,
         model: selectedDoc._id,
         text: editedText,
-        author: props.user._id,
+        author: selectedDoc.author,
       };
-      console.log(data);
       const response = await axios.post("/api/editedDocs/", data);
-      console.log(response);
       closeHandler(index);
     }
   };
@@ -151,29 +149,29 @@ const Doc = (props) => {
             </IconButton>
           </div>
         ) : (
-            <Card
-              key={doc._id}
-              className={classes.root}
-              style={{
-                backgroundColor: "teal",
-                color: "white",
-                fontSize: "25px",
-              }}
-            >
-              <CardContent>
-                <Typography>{doc.text}</Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  style={{ color: "lightgreen" }}
-                  onClick={() => openHandler(index, doc.text)}
-                >
-                  Edit
+          <Card
+            key={doc._id}
+            className={classes.root}
+            style={{
+              backgroundColor: "teal",
+              color: "white",
+              fontSize: "25px",
+            }}
+          >
+            <CardContent>
+              <Typography>{doc.text}</Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                size="small"
+                style={{ color: "lightgreen" }}
+                onClick={() => openHandler(index, doc.text)}
+              >
+                Edit
               </Button>
-              </CardActions>
-            </Card>
-          );
+            </CardActions>
+          </Card>
+        );
       })}
     </div>
   ) : null;
