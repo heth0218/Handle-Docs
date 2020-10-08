@@ -69,4 +69,25 @@ router.get('/mydoc', auth, async (req, res) => {
     }
 })
 
+//Delete the edited doc
+router.delete('/:id', auth, async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(500).send({ msg: 'You are not authorized to this service' })
+        }
+
+        await EditedDocs.findByIdAndDelete(req.params.id);
+
+        const doc = await EditedDocs.findById(req.params.id);
+
+        if (!doc) {
+            return res.status(200).send({ msg: 'Doc successfully deleted!' });
+        }
+
+    } catch (error) {
+        res.status(500).send({ msg: error.message })
+
+    }
+})
+
 module.exports = router;
