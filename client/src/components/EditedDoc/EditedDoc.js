@@ -50,6 +50,35 @@ const EditedDoc = (props) => {
   useEffect(() => {
     apiFetch();
   }, []);
+
+  const deleteHandler = async (id, index) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setAuthToken(token);
+    }
+    await axios.delete("/api/editedDocs/" + id);
+    let dup = [...editedDocs];
+    dup.splice(index, 1);
+    setEditedDocs(dup);
+  };
+
+  const acceptEditHandler = async (docId, id, text) => {
+    console.log(docId);
+    console.log(id);
+    console.log(text);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setAuthToken(token);
+    }
+    const data = {
+      data: {
+        _id: id,
+        text: text,
+      },
+    };
+    await axios.post("/api/newdocs/update/" + docId, data);
+  };
+
   return editedDocs !== null ? (
     <div>
       <h2
@@ -67,14 +96,11 @@ const EditedDoc = (props) => {
           <div key={editedDoc._id}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png"
-                />
+                <Avatar alt="Remy Sharp" src={editedDoc.by.imageUrl} />
               </ListItemAvatar>
               <ListItemText
                 style={{ color: "white" }}
-                primary="Whats up?"
+                primary={editedDoc.by.name}
                 secondary={
                   <React.Fragment>
                     <Typography
@@ -84,16 +110,24 @@ const EditedDoc = (props) => {
                       color="textPrimary"
                       style={{ color: "white" }}
                     >
-                      {editedDoc.by + " - " + editedDoc.text}
+                      {editedDoc.by.name + " - " + editedDoc.text}
                     </Typography>
                   </React.Fragment>
                 }
               ></ListItemText>
               <ListItemSecondaryAction>
-                <IconButton>
+                <IconButton
+                  onClick={() =>
+                    acceptEditHandler(
+                      editedDoc.model,
+                      editedDoc.mainId,
+                      editedDoc.text
+                    )
+                  }
+                >
                   <CheckIcon style={{ color: "lime" }} />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => deleteHandler(editedDoc._id, index)}>
                   <ClearIcon style={{ color: "salmon" }} />
                 </IconButton>
               </ListItemSecondaryAction>

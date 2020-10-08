@@ -105,7 +105,7 @@ const Doc = (props) => {
         text: editedText,
         author: selectedDoc.author,
       };
-      const response = await axios.post("/api/editedDocs/", data);
+      await axios.post("/api/editedDocs/", data);
       closeHandler(index);
     }
   };
@@ -126,7 +126,9 @@ const Doc = (props) => {
         onClick={() => props.history.push("/editedDoc")}
       >
         Goto{" "}
-        {props.user === "admin" ? "Customer Edited Docs" : "Your Edited Docs"}
+        {props.user.role === "admin"
+          ? "Customer Edited Docs"
+          : "Your Edited Docs"}
       </Button>
       <h2 style={{ margin: "auto", textAlign: "center" }}>
         {selectedDoc.title}
