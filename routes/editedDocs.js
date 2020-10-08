@@ -39,7 +39,7 @@ router.get('/', auth, async (req, res) => {
             return res.status(500).send({ msg: 'You are not allowed this facility' })
         }
 
-        const editedDocs = await EditedDocs.find({ author: req.user._id });
+        const editedDocs = await EditedDocs.find({ author: req.user._id }).populate('by');
 
         if (!editedDocs) {
             return res.status(500).send({ msg: 'No docs need to be edited!' })
@@ -55,7 +55,7 @@ router.get('/', auth, async (req, res) => {
 //Get the edited doc via user id If he/she has edited a particular doc
 router.get('/mydoc', auth, async (req, res) => {
     try {
-        const editedDocs = await EditedDocs.find({ by: req.user._id });
+        const editedDocs = await EditedDocs.find({ by: req.user._id }).populate('by');
 
         if (!editedDocs) {
             return res.status(404).send({ msg: 'you havent edited any docs yet!' })
