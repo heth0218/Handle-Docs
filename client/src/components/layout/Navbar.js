@@ -20,7 +20,7 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
               {/* <a href="#" data-target="slide-out" className="sidenav-trigger">
                 <i className="material-icons">menu</i>
               </a> */}
-              <a href="#home" className="brand-logo">
+              <a href="/" className="brand-logo">
                 Handle Docs
               </a>
               <ul className="right hide-on-med-and-down">
@@ -36,7 +36,7 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
                     </li>
                     &nbsp;&nbsp;
                     <li>
-                      <a onClick={onLogout} href="#!">
+                      <a onClick={onLogout} href="/login">
                         <i className="fas fa-sign-out-alt"></i>
                         <span className="hide-sm">Logout</span>
                       </a>
