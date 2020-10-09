@@ -44,6 +44,14 @@ const EditedDoc = (props) => {
       const response = await axios.get("/api/editedDocs/");
       console.log(response.data);
       setEditedDocs(response.data);
+    } else {
+      const token = localStorage.getItem("token");
+      if (token) {
+        setAuthToken(token);
+      }
+      const response = await axios.get("/api/editedDocs/mydoc/");
+      console.log(response.data);
+      setEditedDocs(response.data);
     }
   };
 
@@ -62,10 +70,7 @@ const EditedDoc = (props) => {
     setEditedDocs(dup);
   };
 
-  const acceptEditHandler = async (docId, id, text) => {
-    console.log(docId);
-    console.log(id);
-    console.log(text);
+  const acceptEditHandler = async (docId, id, text, editedDocId, index) => {
     const token = localStorage.getItem("token");
     if (token) {
       setAuthToken(token);
@@ -76,7 +81,13 @@ const EditedDoc = (props) => {
         text: text,
       },
     };
-    await axios.post("/api/newdocs/update/" + docId, data);
+    const response = await axios.post("/api/newdocs/update/" + docId, data);
+    console.log(response);
+    if(response.status === 200) {
+      deleteHandler(editedDocId, index);
+    } else {
+      console.log('some error processing in the request...');
+    }
   };
 
   return editedDocs !== null ? (
@@ -115,13 +126,15 @@ const EditedDoc = (props) => {
                   </React.Fragment>
                 }
               ></ListItemText>
-              <ListItemSecondaryAction>
+              {props.user.role === 'admin' ? <ListItemSecondaryAction>
                 <IconButton
                   onClick={() =>
                     acceptEditHandler(
                       editedDoc.model,
                       editedDoc.mainId,
-                      editedDoc.text
+                      editedDoc.text,
+                      editedDoc._id,
+                      index
                     )
                   }
                 >
@@ -130,7 +143,7 @@ const EditedDoc = (props) => {
                 <IconButton onClick={() => deleteHandler(editedDoc._id, index)}>
                   <ClearIcon style={{ color: "salmon" }} />
                 </IconButton>
-              </ListItemSecondaryAction>
+              </ListItemSecondaryAction> : null}
             </ListItem>
             <Divider variant="inset" component="li" />
           </div>

@@ -14,6 +14,9 @@ import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 
+import { Button as CommentButton, Comment, Form, Header } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "80%",
@@ -33,6 +36,8 @@ const Doc = (props) => {
   const [editedText, setEditedText] = useState("");
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [open, setOpen] = useState(null);
+  const [writeComment, setWriteComment] = useState('');
+  const [comments, setComments] = useState(null);
   const classes = useStyles();
 
   useEffect(() => {
@@ -45,6 +50,9 @@ const Doc = (props) => {
       setAuthToken(token);
     }
     const response = await axios.get("/api/newdocs/" + props.match.params.id);
+    const response1 = await axios.get('/api/comments/' + props.match.params.id);
+    console.log(response1.data);
+    setComments(response1.data);
     const { data } = response;
     setSelectedDoc(data);
     let dup = [];
@@ -91,6 +99,7 @@ const Doc = (props) => {
         "/api/newdocs/update/" + selectedDoc._id,
         data
       );
+      alert('Document Section updated!');
       console.log(response);
       setSelectedDoc(dupObject);
       closeHandler(index);
@@ -106,9 +115,28 @@ const Doc = (props) => {
         author: selectedDoc.author,
       };
       await axios.post("/api/editedDocs/", data);
+      alert('Request for update sent!');
       closeHandler(index);
     }
   };
+
+  const onCommentHandler = async() => {
+    const data = {
+      on: props.match.params.id,
+      text: writeComment
+    }
+    const response = await axios.post('/api/comments/', data);
+    console.log(response);
+    let dup = [...comments];
+    let responseData = {...response.data};
+    responseData.by = {
+      _id: response.data.by,
+      name: props.user.name,
+      imageUrl: props.user.imageUrl
+    }
+    dup.unshift(responseData);
+    setComments(dup);
+  }
 
   return selectedDoc !== null && open !== null ? (
     <div style={{ marginTop: "10px" }}>
@@ -175,6 +203,29 @@ const Doc = (props) => {
           </Card>
         );
       })}
+      <div style={{marginLeft: "15%", marginTop: "30px"}}>
+      <Comment.Group>
+        <Header as='h2' dividing>
+        Comments
+        </Header>
+      {comments.map((comment) => {
+        return <Comment key={comment._id}>
+      <Comment.Avatar src={comment.by.imageUrl}  />
+      <Comment.Content>
+        <Comment.Author as='a'>{comment.by.name}</Comment.Author>
+        <Comment.Metadata>
+          <div>{comment.date}</div>
+        </Comment.Metadata>
+        <Comment.Text>{comment.text}</Comment.Text>
+      </Comment.Content>
+    </Comment>
+      })}
+      <Form reply>
+      <Form.TextArea onChange={(event) => setWriteComment(event.target.value)} />
+      <CommentButton content='Add Reply' labelPosition='left' icon='edit' primary onClick={() => onCommentHandler()} />
+    </Form>
+      </Comment.Group>
+      </div>
     </div>
   ) : null;
 };
