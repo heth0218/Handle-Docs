@@ -85,11 +85,15 @@ router.get('/:id', auth, async (req, res) => {
 //Update the documentation
 router.post('/update/:id', auth, async (req, res) => {
     try {
+        const document = await NewDoc.findById(req.params.id);
+
         if (req.user.role !== 'admin') {
             return res.status(500).send({ msg: 'You are not authorized to this action' });
         }
 
-        const document = await NewDoc.findById(req.params.id);
+        if (req.user._id.toString() !== document.author.toString()) {
+            return res.status(500).send({ msg: 'You are not authorized as you are not the author of this doc!' })
+        }
 
         if (!document) {
             res.status(500).send({ msg: 'No such doc found in the db' });
