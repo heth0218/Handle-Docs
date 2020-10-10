@@ -5,5 +5,6 @@ export const LOGOUT = "LOGOUT";
 export const GET_USER = "GET_USER";
 
 export const FETCH_ALL_DOCS = "FETCH_ALL_DOCS";
-export const FETCH_DOC = "FETCH_DOC";
+export const FILTER_DOCS  = "FILTER_DOCS";
+export const CLEAR_DOCS  = "CLEAR_DOCS";
 export const CREATE_NEW_DOC = "CREATE_NEW_DOC";
