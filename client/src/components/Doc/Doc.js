@@ -51,7 +51,6 @@ const Doc = (props) => {
     }
     const response = await axios.get("/api/newdocs/" + props.match.params.id);
     const response1 = await axios.get('/api/comments/' + props.match.params.id);
-    console.log(response1.data);
     setComments(response1.data);
     const { data } = response;
     setSelectedDoc(data);

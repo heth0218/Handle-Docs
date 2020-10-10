@@ -1,4 +1,4 @@
-import { FETCH_ALL_DOCS, CREATE_NEW_DOC } from "./types";
+import { FETCH_ALL_DOCS, CREATE_NEW_DOC, FILTER_DOCS, CLEAR_DOCS } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -14,6 +14,14 @@ export const fetchAllDocs = () => async (dispatch) => {
     console.log("User not authenticated");
   }
 };
+
+export const filterDocs = text => {
+  return ({type: FILTER_DOCS, payload: text});
+}
+
+export const clearFilterDocs = () => {
+  return ({type: CLEAR_DOCS});
+}
 
 export const addNewDoc = (title, content, imageUrl) => async (dispatch) => {
   const token = localStorage.getItem("token");
