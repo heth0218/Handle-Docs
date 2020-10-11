@@ -80,7 +80,7 @@ const Doc = (props) => {
   };
 
   const editHandler = async (index) => {
-    if (props.user.role === "admin") {
+    if (props.user.role === "admin" && props.user._id === selectedDoc.admin) {
       let dupObject = { ...selectedDoc };
       let dupArray = [...dupObject.doc];
       dupArray[index].text = editedText;
