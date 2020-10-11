@@ -16,7 +16,7 @@ router.post('/', auth, async (req, res) => {
             return res.status(500).send({ msg: 'You are not authorized to avail this service' });
         }
 
-        const { title, doc, imageUrl } = req.body
+        const { title, doc, imageUrl, url } = req.body
 
         const countWords = (str) => {
             str = str.replace(/(^\s*)|(\s*$)/gi, "");
@@ -39,7 +39,8 @@ router.post('/', auth, async (req, res) => {
             doc,
             contentLength,
             author: req.user._id,
-            imageUrl
+            imageUrl,
+            url
         })
 
         await document.save();

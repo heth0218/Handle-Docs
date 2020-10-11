@@ -16,14 +16,15 @@ export const fetchAllDocs = () => async (dispatch) => {
 };
 
 export const filterDocs = text => {
-  return ({type: FILTER_DOCS, payload: text});
+  return ({ type: FILTER_DOCS, payload: text });
 }
 
 export const clearFilterDocs = () => {
-  return ({type: CLEAR_DOCS});
+  return ({ type: CLEAR_DOCS });
 }
 
-export const addNewDoc = (title, content, imageUrl) => async (dispatch) => {
+export const addNewDoc = (title, content, imageUrl, url) => async (dispatch) => {
+  console.log('helolo url', url)
   const token = localStorage.getItem("token");
   if (token) {
     setAuthToken(token);
@@ -32,6 +33,7 @@ export const addNewDoc = (title, content, imageUrl) => async (dispatch) => {
     title: title,
     doc: content,
     imageUrl: imageUrl,
+    url
   };
   try {
     const response = axios.post("/api/newdocs", data);

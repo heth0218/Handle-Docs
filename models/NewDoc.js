@@ -29,6 +29,9 @@ const NewDoc = mongoose.Schema({
     },
     imageUrl: {
         type: String
+    },
+    url: {
+        type: String
     }
 
 });

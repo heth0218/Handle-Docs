@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import { Player } from 'video-react';
 
 import { Button as CommentButton, Comment, Form, Header } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
@@ -119,7 +120,7 @@ const Doc = (props) => {
     }
   };
 
-  const onCommentHandler = async() => {
+  const onCommentHandler = async () => {
     const data = {
       on: props.match.params.id,
       text: writeComment
@@ -127,7 +128,7 @@ const Doc = (props) => {
     const response = await axios.post('/api/comments/', data);
     console.log(response);
     let dup = [...comments];
-    let responseData = {...response.data};
+    let responseData = { ...response.data };
     responseData.by = {
       _id: response.data.by,
       name: props.user.name,
@@ -154,7 +155,7 @@ const Doc = (props) => {
       >
         Goto{" "}
         {props.user.role === "admin"
-          ? "Customer Edited Docs"
+          ? "User Edited Docs"
           : "Your Edited Docs"}
       </Button>
       <h2 style={{ margin: "auto", textAlign: "center" }}>
@@ -178,52 +179,70 @@ const Doc = (props) => {
             </IconButton>
           </div>
         ) : (
-          <Card
-            key={doc._id}
-            className={classes.root}
-            style={{
-              backgroundColor: "teal",
-              color: "white",
-              fontSize: "25px",
-            }}
-          >
-            <CardContent>
-              <Typography>{doc.text}</Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                style={{ color: "lightgreen" }}
-                onClick={() => openHandler(index, doc.text)}
-              >
-                Edit
+            <Card
+              key={doc._id}
+              className={classes.root}
+              style={{
+                backgroundColor: "teal",
+                color: "white",
+                fontSize: "25px",
+              }}
+            >
+              <CardContent>
+                <Typography>{doc.text}</Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  style={{ color: "lightgreen" }}
+                  onClick={() => openHandler(index, doc.text)}
+                >
+                  Edit
               </Button>
-            </CardActions>
-          </Card>
-        );
+              </CardActions>
+            </Card>
+          );
       })}
-      <div style={{marginLeft: "15%", marginTop: "30px"}}>
-      <Comment.Group>
-        <Header as='h2' dividing>
-        Comments
+      <br />
+      <br />
+      {
+        selectedDoc.url &&
+        <div>
+          <div className="center">
+            <h1 className="teal-text">Our Tutorial for the same!</h1>
+          </div>
+          <br />
+          <br />
+          <div className="container" style={{ width: '700px' }}>
+            <Player>
+              <source src={selectedDoc.url} />
+            </Player>
+          </div>
+        </div>
+      }
+
+      <div style={{ marginLeft: "15%", marginTop: "30px" }}>
+        <Comment.Group>
+          <Header as='h2' dividing>
+            Comments
         </Header>
-      {comments.map((comment) => {
-        return <Comment key={comment._id}>
-      <Comment.Avatar src={comment.by.imageUrl}  />
-      <Comment.Content>
-        <Comment.Author as='a'>{comment.by.name}</Comment.Author>
-        <Comment.Metadata>
-          <div>{comment.date}</div>
-        </Comment.Metadata>
-        <Comment.Text>{comment.text}</Comment.Text>
-      </Comment.Content>
-    </Comment>
-      })}
-      <Form reply>
-      <Form.TextArea onChange={(event) => setWriteComment(event.target.value)} />
-      <CommentButton content='Add Reply' labelPosition='left' icon='edit' primary onClick={() => onCommentHandler()} />
-    </Form>
-      </Comment.Group>
+          {comments.map((comment) => {
+            return <Comment key={comment._id}>
+              <Comment.Avatar src={comment.by.imageUrl} />
+              <Comment.Content>
+                <Comment.Author as='a'>{comment.by.name}</Comment.Author>
+                <Comment.Metadata>
+                  <div>{comment.date}</div>
+                </Comment.Metadata>
+                <Comment.Text>{comment.text}</Comment.Text>
+              </Comment.Content>
+            </Comment>
+          })}
+          <Form reply>
+            <Form.TextArea onChange={(event) => setWriteComment(event.target.value)} />
+            <CommentButton content='Add Reply' labelPosition='left' icon='edit' primary onClick={() => onCommentHandler()} />
+          </Form>
+        </Comment.Group>
       </div>
     </div>
   ) : null;
