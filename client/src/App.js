@@ -32,16 +32,31 @@ function App(props) {
     <ThemeProvider theme={themeMode}>
       <Router>
         <GlobalStyles />
-        <Toggle theme={theme} toggleTheme={themeToggler} />
+        {/* <Toggle theme={theme} toggleTheme={themeToggler} /> */}
         {/* <Navbar /> */}
         <Switch>
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/file" component={File} />
-          <Route exact path="/newDoc" component={NewDoc} />
-          <Route exact path="/editedDoc" component={EditedDoc} />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/:id" component={Doc} />
+          <Route
+            exact
+            path="/file"
+            component={File}
+            toggleTheme={themeToggler}
+          />
+          <Route
+            exact
+            path="/newDoc"
+            component={NewDoc}
+            toggleTheme={themeToggler}
+          />
+          <Route
+            exact
+            path="/editedDoc"
+            component={EditedDoc}
+            toggleTheme={themeToggler}
+          />
+          <Route exact path="/" component={Home} toggleTheme={themeToggler} />
+          <Route exact path="/:id" component={Doc} toggleTheme={themeToggler} />
         </Switch>
       </Router>
     </ThemeProvider>

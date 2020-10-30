@@ -13,7 +13,7 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
 
   return (
     <div>
-      <div className="navbar-fixed">
+      <div className="navbar">
         <nav className="teal">
           <div className="container">
             <div className="nav-wrapper">
@@ -41,7 +41,7 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
                         {/* <span className="hide-sm">Logout</span> */}
                       </a>
                     </li>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {/* &nbsp;&nbsp;&nbsp;&nbsp; */}
                     <li>
                       <img
                         src={user.imageUrl}

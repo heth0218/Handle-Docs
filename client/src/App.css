@@ -4,6 +4,17 @@
   font-family: 'Grand Hotel', cursive;
 }
 
+.techName {
+  font-size: large;
+  margin-bottom: 30px;
+}
+
+.authorName {
+  font-size: small;
+  margin-top: 30px;
+  font-family: italic;
+}
+
 .App {
   text-align: center;
 }
