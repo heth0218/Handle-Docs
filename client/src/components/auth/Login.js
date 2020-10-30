@@ -11,13 +11,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
+
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import Grid from "@material-ui/core/Grid";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/userActions";
 import { useHistory } from "react-router-dom";
