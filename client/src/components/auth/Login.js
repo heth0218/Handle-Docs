@@ -1,16 +1,88 @@
 import React, { useState, useEffect } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
+
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControl from "@material-ui/core/FormControl";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import Grid from "@material-ui/core/Grid";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/userActions";
 import { useHistory } from "react-router-dom";
 import M from "materialize-css/dist/js/materialize.min.js";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Copyright © "}
+      <Link color="inherit" href="https://material-ui.com/">
+        KnowIt
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100vh",
+  },
+  image: {
+    backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundRepeat: "no-repeat",
+    backgroundColor:
+      theme.palette.type === "light"
+        ? theme.palette.grey[50]
+        : theme.palette.grey[900],
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  underline: {
+    "&&&:before": {
+      borderBottom: "none",
+    },
+    "&&:after": {
+      borderBottom: "none",
+    },
+  },
+}));
 
 const Login = ({ loginUser, isAuthenticated, error, loggedinUser }) => {
+  const classes = useStyles();
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
-  let history = useHistory();
-
   useEffect(() => {
     if (isAuthenticated) {
       history.push("/");
@@ -21,13 +93,10 @@ const Login = ({ loginUser, isAuthenticated, error, loggedinUser }) => {
     if (error != null) {
       M.toast({ html: `Sorry, ${error}. Invalid Credentials!` });
     }
-    // eslint-disable-next-line
   }, [isAuthenticated, error]);
-
   const { email, password } = user;
 
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
-
   const onSubmit = (e) => {
     e.preventDefault();
     if (email === "" || password === "") {
@@ -37,54 +106,93 @@ const Login = ({ loginUser, isAuthenticated, error, loggedinUser }) => {
       console.log(email, password);
     }
   };
+  let history = useHistory();
   return (
-    <div>
-      <section className="section section-login">
-        <div className="container">
-          <div className="row">
-            <div className="col s12 m8 offset-m2 l6 offset-l3">
-              <div className="card-panel login teal darken-2 white-text center">
-                <h2>User Login</h2>
-                <form>
-                  <div className="input-field">
-                    <div className="material-icons prefix">email</div>
-                    <input
-                      type="email"
-                      name="email"
-                      value={email}
-                      id="email"
-                      onChange={onChange}
-                    />
-                    <label className="white-text" for="email">
-                      Email
-                    </label>
-                  </div>
-                  <div className="input-field">
-                    <div className="material-icons prefix">lock</div>
-                    <input
-                      type="password"
-                      name="password"
-                      value={password}
-                      id="password"
-                      onChange={onChange}
-                    />
-                    <label className="white-text" for="password">
-                      Password
-                    </label>
-                  </div>
-                  <input
-                    type="submit"
-                    value="Login"
-                    onClick={onSubmit}
-                    className="btn btn-large btn-extended waves-effect waves-grey white black-text"
-                  />
-                </form>
-              </div>
-            </div>
-          </div>
+    <Grid container component="main" className={classes.root}>
+      <CssBaseline />
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              className={classes.underline}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MailOutlineIcon />
+                  </InputAdornment>
+                ),
+              }}
+              disableUnderline
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={onChange}
+            />
+            <TextField
+              className={classes.underline}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockOpenIcon />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={onChange}
+              value={password}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={onSubmit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                {/* <Link href="#" variant="body2">
+                  Forgot password?
+                </Link> */}
+              </Grid>
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+            <Box mt={5}>
+              <Copyright />
+            </Box>
+          </form>
         </div>
-      </section>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 

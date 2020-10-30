@@ -22,7 +22,7 @@ function App(props) {
   }, [props]);
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar /> */}
       <Switch>
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
