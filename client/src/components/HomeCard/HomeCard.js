@@ -38,7 +38,7 @@ const HomeCard = (props) => {
 
   return (
     <div className={classes.root}>
-      <GridList cellHeight={250} className={classes.gridList} cols={3}>
+      <GridList cellHeight={250} className={classes.gridList} cols={2}>
         {props.docs.map((doc) => (
           <GridListTile key={doc.imageUrl} cols={1}>
             <img

@@ -26,7 +26,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-        KnowIt
+        Handle Docs
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -85,7 +85,7 @@ const Login = ({ loginUser, isAuthenticated, error, loggedinUser }) => {
     if (isAuthenticated) {
       history.push("/");
       M.toast({
-        html: `Hello, ${loggedinUser.name} you have successfully been logged in!`,
+        html: `Hi, ${loggedinUser.name} you have successfully been logged in!`,
       });
     }
     if (error != null) {
