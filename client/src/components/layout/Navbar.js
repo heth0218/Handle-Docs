@@ -13,7 +13,7 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
 
   return (
     <div>
-      <div className="navbar-fixed">
+      <div className="navbar">
         <nav className="teal">
           <div className="container">
             <div className="nav-wrapper">
@@ -32,16 +32,16 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
                       </Link>
                     </li>
                     <li>
-                      <span>&nbsp;&nbsp;&nbsp;Hello, {user.name}</span>
+                      <span>&nbsp;&nbsp;&nbsp;Hi, {user.name}</span>
                     </li>
                     &nbsp;&nbsp;
                     <li>
                       <a onClick={onLogout} href="/login">
                         <i className="fas fa-sign-out-alt"></i>
-                        <span className="hide-sm">Logout</span>
+                        {/* <span className="hide-sm">Logout</span> */}
                       </a>
                     </li>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {/* &nbsp;&nbsp;&nbsp;&nbsp; */}
                     <li>
                       <img
                         src={user.imageUrl}

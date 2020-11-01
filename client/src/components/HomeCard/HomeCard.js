@@ -14,13 +14,13 @@ const useStyles = makeStyles((theme) => ({
     // flexWrap: "wrap",
     justifydocs: "space-between",
     // overflow: "hidden",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#363537",
     marginTop: "30px",
-    marginLeft: "100px",
-    marginRight: "100px",
+    marginLeft: "80px",
+    marginRight: "80px",
   },
   gridList: {
-    width: "100%",
+    width: "auto",
     height: "auto",
     margin: "30px",
   },
@@ -36,10 +36,24 @@ const HomeCard = (props) => {
     props.history.push("/" + id);
   };
 
+  const getColor = () => {
+    let arr = [
+      "#0af0e8",
+      "#66f00a",
+      "#f0380a",
+      "#0a47f0",
+      "#f0d10a",
+      "#ec0af0",
+    ];
+    const num = Math.ceil(Math.random() * arr.length);
+
+    return arr[num];
+  };
+
   return (
     <div className={classes.root}>
-      <GridList cellHeight={250} className={classes.gridList} cols={3}>
-        {props.docs.map((doc) => (
+      <GridList cellHeight={250} className={classes.gridList} cols={2}>
+        {props.docs.map((doc, index) => (
           <GridListTile key={doc.imageUrl} cols={1}>
             <img
               src={doc.imageUrl}
@@ -47,15 +61,24 @@ const HomeCard = (props) => {
               onClick={() => documentClickHandler(doc._id)}
             />
             <GridListTileBar
-              title={doc.title}
-              subtitle={<span>by: {doc.author.name}</span>}
+              title={
+                <span
+                  className="brand-logo techName"
+                  style={{ color: getColor() }}
+                >
+                  {doc.title}
+                </span>
+              }
+              subtitle={
+                <span className="authorName">--by: {doc.author.name}</span>
+              }
               actionIcon={
                 <IconButton
                   aria-label={`info about ${doc.title}`}
-                  className={classes.icon}
+                  //className={classes.icon}
                   onClick={() => documentClickHandler(doc._id)}
                 >
-                  <ArrowForwardIosIcon />
+                  <ArrowForwardIosIcon style={{ color: getColor() }} />
                 </IconButton>
               }
             />

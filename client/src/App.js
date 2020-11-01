@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./App.css";
 import "materialize-css/dist/css/materialize.min.css";
@@ -13,26 +13,53 @@ import Home from "./components/Home/Home";
 import NewDoc from "./components/NewDoc/NewDoc";
 import EditedDoc from "./components/EditedDoc/EditedDoc";
 import { loadUser } from "./actions/userActions";
-
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "./theme";
+import { GlobalStyles } from "./global";
+import { useDarkMode } from "./useDarkMode";
+import Toggle from "./Toggler";
 function App(props) {
   useEffect(() => {
-    //Initializes materialize js
     M.AutoInit();
     props.onLoadUser();
   }, [props]);
+
+  const [theme, themeToggler] = useDarkMode();
+
+  const themeMode = theme === "light" ? lightTheme : darkTheme;
+
   return (
-    <Router>
-      <Navbar />
-      <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/file" component={File} />
-        <Route exact path="/newDoc" component={NewDoc} />
-        <Route exact path="/editedDoc" component={EditedDoc} />
-        <Route exact path="/" component={Home} />
-        <Route exact path="/:id" component={Doc} />
-      </Switch>
-    </Router>
+    <ThemeProvider theme={themeMode}>
+      <Router>
+        <GlobalStyles />
+        {/* <Toggle theme={theme} toggleTheme={themeToggler} /> */}
+        {/* <Navbar /> */}
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Route
+            exact
+            path="/file"
+            component={File}
+            toggleTheme={themeToggler}
+          />
+          <Route
+            exact
+            path="/newDoc"
+            component={NewDoc}
+            toggleTheme={themeToggler}
+          />
+          <Route
+            exact
+            path="/editedDoc"
+            component={EditedDoc}
+            toggleTheme={themeToggler}
+          />
+          <Route exact path="/" component={Home} toggleTheme={themeToggler} />
+          <Route exact path="/:id" component={Doc} toggleTheme={themeToggler} />
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
 
