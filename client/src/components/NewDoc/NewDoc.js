@@ -1,17 +1,65 @@
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import M from 'materialize-css/dist/js/materialize.min.js';
-import TextField from "@material-ui/core/TextField";
+import M from "materialize-css/dist/js/materialize.min.js";
+
 import Icon from "@material-ui/core/Icon";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { addNewDoc } from "../../actions/newDocs";
-import firebase from './firebase'
-import { Player } from 'video-react';
+import firebase from "./firebase";
+import { Player } from "video-react";
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Copyright © "}
+      <Link color="inherit" href="https://material-ui.com/">
+        <span cllas="brand-logo">Handlle Docs</span>
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  submit2: {
+    margin: theme.spacing(0, 0, 0),
+  },
+}));
 
 const NewDoc = (props) => {
+  const classes = useStyles();
   const [number, setNumber] = useState([Math.random()]);
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -19,14 +67,11 @@ const NewDoc = (props) => {
   const [files, setFiles] = useState();
   const [url, setUrl] = useState();
 
-
-
   useEffect(() => {
     if (url) {
       props.onAddNewDoc(title, content, imageUrl, url);
     }
-  }, [url])
-
+  }, [url]);
 
   const addButtonHandler = (event) => {
     event.preventDefault();
@@ -56,32 +101,32 @@ const NewDoc = (props) => {
   const submitFormHandler = async () => {
     if (!files) {
       return M.toast({ html: "Please insert a video!" });
-
     }
-    let bucketName = 'images';
+    let bucketName = "images";
     let file = files[0];
     let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`);
     let uploadTask = storageRef.put(file);
     await uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, () => {
-      let downloadURL = uploadTask.snapshot.downloadURL
-    })
+      let downloadURL = uploadTask.snapshot.downloadURL;
+    });
 
     storageRef = firebase.storage().ref();
 
-    const vidurl = await storageRef.child('images/' + files[0].name).getDownloadURL();
-    console.log(vidurl)
+    const vidurl = await storageRef
+      .child("images/" + files[0].name)
+      .getDownloadURL();
+    console.log(vidurl);
     M.toast({ html: "Video saved successfully" });
-    setUrl(vidurl)
+    setUrl(vidurl);
   };
 
   const handleChange = (file) => {
-    setFiles(file)
-  }
+    setFiles(file);
+  };
 
   const showImage = async () => {
     if (!files) {
-      return M.toast({ html: 'Please upload a video to show!!' })
-
+      return M.toast({ html: "Please upload a video to show!!" });
     }
     let storageRef = firebase.storage().ref();
     // let spaceRef = storageRef.child('images/' + files[0].name);
@@ -89,92 +134,139 @@ const NewDoc = (props) => {
     //     console.log(url);
     //     setUrl(url)
     // })
-    const url = await storageRef.child('images/' + files[0].name).getDownloadURL();
-    console.log(url)
-    setUrl(url)
+    const url = await storageRef
+      .child("images/" + files[0].name)
+      .getDownloadURL();
+    console.log(url);
+    setUrl(url);
 
     if (!url) {
-      return M.toast({ html: 'Please upload a video to show!!' })
+      return M.toast({ html: "Please upload a video to show!!" });
     }
-  }
+  };
 
   return (
-    <div>
-      <h2 style={{ textAlign: "center" }}>Create a New Documentation</h2>
-      <div style={{ width: "80%", margin: "auto" }}>
-        <TextField
-          label="title"
-          fullWidth
-          onChange={(event) => titleChangedHandler(event)}
-        />
-        <TextField
-          label="imageUrl"
-          fullWidth
-          onChange={(event) => imageUrlChangedHandler(event)}
-        />
-        {number.map((el, i) => {
-          return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Create documentation for <span class="brand-logo">{title}</span>
+        </Typography>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
             <TextField
-              key={el + `${i}`}
-              label="Content"
-              multiline
-              rows={3}
+              name="Title"
+              variant="outlined"
+              required
               fullWidth
-              defaultValue=""
-              onChange={(event) => contentChangedHandler(event, i)}
+              id="firstName"
+              label="Title"
+              autoFocus
+              onChange={(event) => titleChangedHandler(event)}
             />
-          );
-        })}
-        <Fab
-          color="primary"
-          aria-label="add"
-          style={{ float: "right" }}
-          onClick={(event) => addButtonHandler(event)}
-        >
-          <AddIcon />
-        </Fab>
-        <div className="container" >
-          <h1 style={{ marginTop: '100px' }}>
-            <span class="grey-text">Upload</span>
-            <span className="teal-text"> Lecture</span>
-            <br /><br />
-          </h1>
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>Video</span>
-              <input type="file" onChange={(e) => { handleChange(e.target.files) }} />
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              id="Image URL"
+              label="Image URL"
+              name="lastName"
+              onChange={(event) => imageUrlChangedHandler(event)}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            {number.map((el, i) => {
+              return (
+                <TextField
+                  key={el + `${i}`}
+                  label="Content"
+                  multiline
+                  rows={3}
+                  fullWidth
+                  defaultValue=""
+                  onChange={(event) => contentChangedHandler(event, i)}
+                />
+              );
+            })}
+          </Grid>
+          <Grid item xs={10}></Grid>
+          <Grid item xs={2}>
+            <Fab
+              color="primary"
+              aria-label="add"
+              style={{ float: "right" }}
+              onClick={(event) => addButtonHandler(event)}
+            >
+              <AddIcon />
+            </Fab>
+          </Grid>
+        </Grid>
+        <React.Fragment>
+          <div className="container">
+            <div class="file-field input-field">
+              <span>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit2}
+                >
+                  Video
+                </Button>
+              </span>
+              <span>
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    handleChange(e.target.files);
+                  }}
+                />
+              </span>
+
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" />
+              </div>
             </div>
           </div>
-          {/* <button class="btn waves-effect waves-light" type="submit" name="action" onClick={handleSave}>Save
-    <i class="material-icons right">send</i>
-          </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-          <button class="btn waves-effect waves-light" type="submit" name="action" onClick={showImage}>Show the video I uploaded
-    <i class="material-icons right">movie</i>
-          </button>
-          <div style={{ "height": "auto", "width": "300px", "marginLeft": "500px" }}>
-            {url && <Player>
-              <source src={url} />
-            </Player>}
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={showImage}
+            className={classes.button}
+            endIcon={<Icon>video</Icon>}
+          >
+            Show Video
+          </Button>
+          <div style={{ height: "auto", width: "300px", marginLeft: "500px" }}>
+            {url && (
+              <Player>
+                <source src={url} />
+              </Player>
+            )}
           </div>
-        </div>
+        </React.Fragment>
         <Button
+          type="submit"
+          fullWidth
           variant="contained"
           color="primary"
-          endIcon={<Icon>send</Icon>}
-          style={{
-            marginTop: "100px",
-            left: "50%",
-            width: "10%",
-          }}
+          className={classes.submit}
           onClick={submitFormHandler}
         >
-          Submit
+          Submit Document.
         </Button>
       </div>
-    </div>
+      <Box mt={5}>
+        <Copyright />
+      </Box>
+    </Container>
   );
 };
 
@@ -184,5 +276,4 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addNewDoc(title, content, imageUrl, url)),
   };
 };
-
 export default connect(null, mapDispatchToProps)(NewDoc);
