@@ -86,7 +86,9 @@ const Doc = (props) => {
     responseData.by = {
       _id: response.data.by,
       name: props.user.name,
-      imageUrl: props.user.imageUrl,
+      imageUrl:
+        props.user.imageUrl ||
+        "https://lh3.googleusercontent.com/proxy/QvI0kNCaa4tn2rlyOyUKb_XBD95TdQLOXBu7Z__6YroXkdilb-J2X_Sw0Dw3_k7k0-eXkngOKLhK3qJseD-j7AqLjx628Pw",
     };
     dup.unshift(responseData);
     setComments(dup);
@@ -320,19 +322,24 @@ const Doc = (props) => {
                     <div class="tab-pane active" id="comments-logout">
                       <ul class="media-list">
                         {comments.map((comment) => {
+                          console.log(comment);
                           return (
                             <li class="media" key={comment._id}>
                               <a class="pull-left" href="#">
                                 <img
                                   class="media-object img-circle"
-                                  src={comment.by.imageUrl}
+                                  src={
+                                    comment.by
+                                      ? comment.by.imageUrl
+                                      : "https://lh3.googleusercontent.com/proxy/QvI0kNCaa4tn2rlyOyUKb_XBD95TdQLOXBu7Z__6YroXkdilb-J2X_Sw0Dw3_k7k0-eXkngOKLhK3qJseD-j7AqLjx628Pw"
+                                  }
                                   alt="profile"
                                 />
                               </a>
                               <div class="media-body">
                                 <div class="well well-lg">
                                   <h4 class="media-heading text-uppercase reviews">
-                                    {comment.by.name}
+                                    {comment.by ? comment.by.name : "admin"}
                                   </h4>
                                   <ul class="media-date text-uppercase reviews list-inline">
                                     <li class="dd">
