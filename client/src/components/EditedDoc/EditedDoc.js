@@ -36,6 +36,7 @@ const EditedDoc = (props) => {
   const [editedDocs, setEditedDocs] = useState(null);
 
   const apiFetch = async () => {
+    console.log(props.user);
     if (props.user.role === "admin") {
       const token = localStorage.getItem("token");
       if (token) {
@@ -83,10 +84,10 @@ const EditedDoc = (props) => {
     };
     const response = await axios.post("/api/newdocs/update/" + docId, data);
     console.log(response);
-    if(response.status === 200) {
+    if (response.status === 200) {
       deleteHandler(editedDocId, index);
     } else {
-      console.log('some error processing in the request...');
+      console.log("some error processing in the request...");
     }
   };
 
@@ -126,24 +127,28 @@ const EditedDoc = (props) => {
                   </React.Fragment>
                 }
               ></ListItemText>
-              {props.user.role === 'admin' ? <ListItemSecondaryAction>
-                <IconButton
-                  onClick={() =>
-                    acceptEditHandler(
-                      editedDoc.model,
-                      editedDoc.mainId,
-                      editedDoc.text,
-                      editedDoc._id,
-                      index
-                    )
-                  }
-                >
-                  <CheckIcon style={{ color: "lime" }} />
-                </IconButton>
-                <IconButton onClick={() => deleteHandler(editedDoc._id, index)}>
-                  <ClearIcon style={{ color: "salmon" }} />
-                </IconButton>
-              </ListItemSecondaryAction> : null}
+              {props.user.role === "admin" ? (
+                <ListItemSecondaryAction>
+                  <IconButton
+                    onClick={() =>
+                      acceptEditHandler(
+                        editedDoc.model,
+                        editedDoc.mainId,
+                        editedDoc.text,
+                        editedDoc._id,
+                        index
+                      )
+                    }
+                  >
+                    <CheckIcon style={{ color: "lime" }} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => deleteHandler(editedDoc._id, index)}
+                  >
+                    <ClearIcon style={{ color: "salmon" }} />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              ) : null}
             </ListItem>
             <Divider variant="inset" component="li" />
           </div>
