@@ -194,7 +194,7 @@ const Register = ({ registerUser, isAuthenticated }) => {
             />
             <input
               accept="image/*"
-              className={classes.inputphoto}
+              style={{ display: "none" }}
               id="contained-button-file"
               onChange={onFileChange}
               multiple

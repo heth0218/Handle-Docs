@@ -16,7 +16,7 @@ const UserSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    default: "learner",
+    default: "admin",
   },
   date: {
     type: Date,
