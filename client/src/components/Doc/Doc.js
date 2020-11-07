@@ -19,6 +19,7 @@ import Navbar from "../layout/Navbar";
 import EditIcon from "@material-ui/icons/Edit";
 import FormControl from "@material-ui/core/FormControl";
 import RichTextEditor from "react-rte";
+import Grid from "@material-ui/core/Grid";
 import {
   Button as CommentButton,
   Comment,
@@ -225,12 +226,23 @@ const Doc = (props) => {
                   onChange={(event) => typingHandler(event)}
                 />
                 <React.Fragment>
-                  <IconButton onClick={() => editHandler(index)}>
-                    <CheckIcon style={{ color: "green" }} />
-                  </IconButton>
-                  <IconButton onClick={() => closeHandler(index)}>
-                    <ClearIcon style={{ color: "red" }} />
-                  </IconButton>
+                  <Grid item xs={6}>
+                    {/* <IconButton > */}
+                    <CheckIcon
+                      onClick={() => editHandler(index)}
+                      style={{ color: "green", margin: "10px" }}
+                    />
+                    <ClearIcon
+                      onClick={() => closeHandler(index)}
+                      style={{ color: "red", margin: "10px" }}
+                    />
+                    {/* </IconButton> */}
+                  </Grid>
+                  {/* <Grid item xs={6}>
+                    <IconButton >
+                     
+                    </IconButton>
+                  </Grid> */}
                 </React.Fragment>
               </FormControl>
             </div>
