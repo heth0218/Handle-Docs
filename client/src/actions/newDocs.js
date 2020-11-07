@@ -24,7 +24,7 @@ export const clearFilterDocs = () => {
 }
 
 export const addNewDoc = (title, content, imageUrl, url) => async (dispatch) => {
-  console.log('helolo url', url)
+  console.log(url, 'LALLALALLALA')
   const token = localStorage.getItem("token");
   if (token) {
     setAuthToken(token);
@@ -36,8 +36,8 @@ export const addNewDoc = (title, content, imageUrl, url) => async (dispatch) => 
     url
   };
   try {
-    const response = axios.post("/api/newdocs", data);
-    console.log(response);
+    const response = await axios.post("/api/newdocs", data);
+    console.log(response.data);
     dispatch({ type: CREATE_NEW_DOC, payload: response.data });
   } catch (error) {
     console.log("Something went wrong...");

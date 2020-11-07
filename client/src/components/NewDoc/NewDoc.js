@@ -2,8 +2,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -13,10 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import M from "materialize-css/dist/js/materialize.min.js";
-
 import Icon from "@material-ui/core/Icon";
-// import Button from "@material-ui/core/Button";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { addNewDoc } from "../../actions/newDocs";
@@ -66,6 +61,8 @@ const NewDoc = (props) => {
   const [content, setContent] = useState([{ text: "" }]);
   const [files, setFiles] = useState();
   const [url, setUrl] = useState();
+  const [tempurl, setTempUrl] = useState();
+  const [patience, setPatience] = useState(false);
 
   useEffect(() => {
     if (url) {
@@ -98,72 +95,40 @@ const NewDoc = (props) => {
     setContent(dup);
   };
 
-  const submitFormHandler = async () => {
-    if (!files) {
-      return M.toast({ html: "Please insert a video!" });
-    }
-    let bucketName = "images";
-    let file = files[0];
-    let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`);
-    let uploadTask = storageRef.put(file);
-    await uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, () => {
-      let downloadURL = uploadTask.snapshot.downloadURL;
-    });
 
-    storageRef = firebase.storage().ref();
 
-    const vidurl = await storageRef
-      .child("images/" + files[0].name)
-      .getDownloadURL();
-    console.log(vidurl);
-    M.toast({ html: "Video saved successfully" });
-    setUrl(vidurl);
-  };
+  // const submit_link
+  const submitFormHandler = (e) => {
+    e.preventDefault()
+    setUrl(tempurl)
+    setPatience(false)
+  }
+
 
   const handleChange = (file) => {
     setFiles(file);
   };
 
-
   const showImage = async () => {
-    if (!files) {
-      return M.toast({ html: "Please upload a video to show!!" });
-    }
+    var file = files[0]
+    var storageRef = firebase.storage().ref('images/' + file.name);
 
+    var uploadTask = storageRef.put(file)
 
-    //Get file
-    var file = files[0];
-    //Create a storage ref
-    var storageRef = await firebase.storage().ref("images/" + file.name);
-    //Upload file
-    storageRef.put(file).then(function (result) {
-      //Get URL and store to pass
-      storageRef.getDownloadURL().then(function (result) {
-        console.log("wsad", result);
-        setUrl(result);
-      });
+    uploadTask.on('state_changed', function (snapshot) {
+
+    }, function (error) {
+      console.log(error);
+    }, async function () {
+
+      // get the uploaded image url back 
+      const url = await uploadTask.snapshot.ref.getDownloadURL()
+      setTempUrl(url);
+      console.log(url, 'lalalal')
     });
+    setPatience(true)
 
-    // console.log(url);
-    // setUrl(url);
-    // await Promise.all()
-    if (!url) {
-      return M.toast({ html: "Please upload a video to show!!" });
-    }
-    // const ref = firebase.storage().ref();
-    // var file = files[0];
-    // const name = "images/" + file.name;
-    // const metadata = { contentType: file.type };
-    // task
-    //   .then(snapshot => snapshot.ref.getDownloadURL())
-    //   .then(url => console.log(url))
-    // const image = ref.child(name);
-    // const urlPromise = image.getDownloadURL();
-    // urlPromise.then(url => {
-    //   // document.querySelector('#someImageTagID').src = url;
-    //   console.log(url)
-    // })
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -249,12 +214,13 @@ const NewDoc = (props) => {
                 />
               </span>
 
+
               <div class="file-path-wrapper">
                 <input class="file-path validate" type="text" />
               </div>
             </div>
           </div>
-
+          <br />
           <Button
             variant="contained"
             color="primary"
@@ -264,15 +230,16 @@ const NewDoc = (props) => {
           >
             Show Video
           </Button>
+          {!tempurl && patience && <h4>Please be patient while the video is being uploaded!</h4>}
           <div style={{ height: "auto", width: "300px", marginLeft: "500px" }}>
-            {url && (
+            {tempurl && (
               <Player>
-                <source src={url} />
+                <source src={tempurl} />
               </Player>
             )}
           </div>
         </React.Fragment>
-        <Button
+        {tempurl && <Button
           type="submit"
           fullWidth
           variant="contained"
@@ -281,7 +248,7 @@ const NewDoc = (props) => {
           onClick={submitFormHandler}
         >
           Submit Document.
-        </Button>
+        </Button>}
       </div>
       <Box mt={5}>
         <Copyright />
