@@ -32,7 +32,7 @@ function App(props) {
     <ThemeProvider theme={themeMode}>
       <Router>
         <GlobalStyles />
-        {/* <Toggle theme={theme} toggleTheme={themeToggler} /> */}
+        <Toggle theme={theme} toggleTheme={themeToggler} />
         {/* <Navbar /> */}
         <Switch>
           <Route exact path="/login" component={Login} />
