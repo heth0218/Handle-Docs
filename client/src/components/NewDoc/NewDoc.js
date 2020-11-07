@@ -124,25 +124,45 @@ const NewDoc = (props) => {
     setFiles(file);
   };
 
+
   const showImage = async () => {
     if (!files) {
       return M.toast({ html: "Please upload a video to show!!" });
     }
-    let storageRef = firebase.storage().ref();
-    // let spaceRef = storageRef.child('images/' + files[0].name);
-    // storageRef.child('images/' + files[0].name).getDownloadURL().then((url) => {
-    //     console.log(url);
-    //     setUrl(url)
-    // })
-    const url = await storageRef
-      .child("images/" + files[0].name)
-      .getDownloadURL();
-    console.log(url);
-    setUrl(url);
 
+
+    //Get file
+    var file = files[0];
+    //Create a storage ref
+    var storageRef = await firebase.storage().ref("images/" + file.name);
+    //Upload file
+    storageRef.put(file).then(function (result) {
+      //Get URL and store to pass
+      storageRef.getDownloadURL().then(function (result) {
+        console.log("wsad", result);
+        setUrl(result);
+      });
+    });
+
+    // console.log(url);
+    // setUrl(url);
+    // await Promise.all()
     if (!url) {
       return M.toast({ html: "Please upload a video to show!!" });
     }
+    // const ref = firebase.storage().ref();
+    // var file = files[0];
+    // const name = "images/" + file.name;
+    // const metadata = { contentType: file.type };
+    // task
+    //   .then(snapshot => snapshot.ref.getDownloadURL())
+    //   .then(url => console.log(url))
+    // const image = ref.child(name);
+    // const urlPromise = image.getDownloadURL();
+    // urlPromise.then(url => {
+    //   // document.querySelector('#someImageTagID').src = url;
+    //   console.log(url)
+    // })
   };
 
   return (
