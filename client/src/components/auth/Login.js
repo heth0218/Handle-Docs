@@ -83,7 +83,7 @@ const Login = ({ loginUser, isAuthenticated, error, loggedinUser }) => {
   });
   useEffect(() => {
     if (isAuthenticated) {
-      history.push("/");
+      history.push("/home");
       M.toast({
         html: `Hi, ${loggedinUser.name} you have successfully been logged in!`,
       });

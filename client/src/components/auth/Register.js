@@ -54,7 +54,7 @@ const Register = ({ registerUser, isAuthenticated }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      history.push("/");
+      history.push("/home");
       M.toast({ html: `${name} you have successfully been registered!` });
     }
     // eslint-disable-next-line
