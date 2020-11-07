@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import "./App.css";
 import "materialize-css/dist/css/materialize.min.css";
 import M from "materialize-css/dist/js/materialize.min.js";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Navbar from "./components/layout/Navbar";
@@ -35,6 +35,7 @@ function App(props) {
         <Toggle theme={theme} toggleTheme={themeToggler} />
         {/* <Navbar /> */}
         <Switch>
+          <Redirect exact from="/" to="register" />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route
@@ -55,7 +56,7 @@ function App(props) {
             component={EditedDoc}
             toggleTheme={themeToggler}
           />
-          <Route exact path="/" component={Home} toggleTheme={themeToggler} />
+          <Route exact path="/home" component={Home} toggleTheme={themeToggler} />
           <Route exact path="/:id" component={Doc} toggleTheme={themeToggler} />
         </Switch>
       </Router>
