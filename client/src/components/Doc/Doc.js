@@ -135,7 +135,7 @@ const Doc = (props) => {
   };
 
   const editHandler = async (index) => {
-    if (props.user.role === "admin" && props.user._id === selectedDoc.admin) {
+    if (props.user.role === "admin" && props.user._id === selectedDoc.author) {
       let dupObject = { ...selectedDoc };
       let dupArray = [...dupObject.doc];
       dupArray[index].text = editedText;
@@ -190,7 +190,9 @@ const Doc = (props) => {
             width: "20%",
             transform: "translate(-50%, -50%)",
           }}
-          onClick={() => props.history.push("/editedDoc")}
+          onClick={() => props.history.push({
+            pathname: "/editedDoc", selectedDoc
+          })}
         >
           Goto{" "}
           {props.user.role === "admin"
@@ -247,32 +249,32 @@ const Doc = (props) => {
               </FormControl>
             </div>
           ) : (
-            <Card
-              key={doc._id}
-              className={classes.root}
-              style={{
-                backgroundColor: "teal",
-                color: "white",
-                fontSize: "25px",
-              }}
-            >
-              <CardContent>
-                <Typography style={{ fontSize: "20px" }}>{doc.text}</Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  style={{ color: "lightgreen" }}
-                  onClick={() => openHandler(index, doc.text)}
-                >
-                  Edit this info.
+              <Card
+                key={doc._id}
+                className={classes.root}
+                style={{
+                  backgroundColor: "teal",
+                  color: "white",
+                  fontSize: "25px",
+                }}
+              >
+                <CardContent>
+                  <Typography style={{ fontSize: "20px" }}>{doc.text}</Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size="small"
+                    style={{ color: "lightgreen" }}
+                    onClick={() => openHandler(index, doc.text)}
+                  >
+                    Edit this info.
                   <IconButton aria-label="share">
-                    <EditIcon />
-                  </IconButton>
-                </Button>
-              </CardActions>
-            </Card>
-          );
+                      <EditIcon />
+                    </IconButton>
+                  </Button>
+                </CardActions>
+              </Card>
+            );
         })}
         <br />
         <br />

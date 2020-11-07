@@ -55,7 +55,7 @@ router.get('/', auth, async (req, res) => {
 //Get the edited doc via user id If he/she has edited a particular doc
 router.get('/mydoc', auth, async (req, res) => {
     try {
-        const editedDocs = await EditedDocs.find({ by: req.user._id }).populate('by');
+        const editedDocs = await EditedDocs.find({ by: req.user._id }).populate('by').populate('model');
 
         if (!editedDocs) {
             return res.status(404).send({ msg: 'you havent edited any docs yet!' })
