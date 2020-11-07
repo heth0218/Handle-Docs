@@ -27,12 +27,14 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
                 {isAuthenticated ? (
                   <Fragment>
                     <li>
-                      <Link to="/" className="waves-effect waves-light">
+                      <Link to="/" className="brand-logo brand-logo1 ">
                         Home
                       </Link>
                     </li>
                     <li>
-                      <span>&nbsp;&nbsp;&nbsp;Hi, {user.name}</span>
+                      <span className="brand-logo brand-logo1 brand-logo3">
+                        &nbsp;&nbsp;&nbsp;Hi, {user.name}
+                      </span>
                     </li>
                     &nbsp;&nbsp;
                     <li>
@@ -41,7 +43,7 @@ const Navbar = ({ user: { user, isAuthenticated }, logout, icon, title }) => {
                         {/* <span className="hide-sm">Logout</span> */}
                       </a>
                     </li>
-                    {/* &nbsp;&nbsp;&nbsp;&nbsp; */}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <li>
                       <img
                         src={user.imageUrl}

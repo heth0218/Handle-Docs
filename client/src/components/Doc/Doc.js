@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, PropTypes } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import setAuthToken from "../../utils/setAuthToken";
@@ -18,6 +18,7 @@ import { Player } from "video-react";
 import Navbar from "../layout/Navbar";
 import EditIcon from "@material-ui/icons/Edit";
 import FormControl from "@material-ui/core/FormControl";
+import RichTextEditor from "react-rte";
 import {
   Button as CommentButton,
   Comment,
@@ -45,12 +46,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Doc = (props) => {
+  // propTypes = {
+  //   onChange: PropTypes.func,
+  // };
   const [editedText, setEditedText] = useState("");
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [open, setOpen] = useState(null);
   const [writeComment, setWriteComment] = useState("");
   const [comments, setComments] = useState(null);
   const classes = useStyles();
+
+  const [value, setValue] = useState(RichTextEditor.createEmptyValue());
+
+  const onChange = (value) => {
+    console.log(value);
+    setValue(value);
+    value = value.toString("html");
+    value = value.replace(/(<([^>]+)>)/gi, "");
+    console.log(value);
+    setWriteComment(value);
+
+    // if (this.props.onChange) {
+    //   // Send the changes up to the parent component as an HTML string.
+    //   // This is here to demonstrate using `.toString()` but in a real app it
+    //   // would be better to avoid generating a string on each change.
+    //   //this.props.onChange(value.toString("html"));
+    // }
+  };
+
+  const onCommentHandler = async () => {
+    const data = {
+      on: props.match.params.id,
+      text: writeComment,
+    };
+    const response = await axios.post("/api/comments/", data);
+    console.log(response);
+    let dup = [...comments];
+    let responseData = { ...response.data };
+    responseData.by = {
+      _id: response.data.by,
+      name: props.user.name,
+      imageUrl: props.user.imageUrl,
+    };
+    dup.unshift(responseData);
+    setComments(dup);
+    setValue(RichTextEditor.createEmptyValue());
+  };
 
   useEffect(() => {
     apiFetch();
@@ -129,24 +170,6 @@ const Doc = (props) => {
       alert("Request for update sent!");
       closeHandler(index);
     }
-  };
-
-  const onCommentHandler = async () => {
-    const data = {
-      on: props.match.params.id,
-      text: writeComment,
-    };
-    const response = await axios.post("/api/comments/", data);
-    console.log(response);
-    let dup = [...comments];
-    let responseData = { ...response.data };
-    responseData.by = {
-      _id: response.data.by,
-      name: props.user.name,
-      imageUrl: props.user.imageUrl,
-    };
-    dup.unshift(responseData);
-    setComments(dup);
   };
 
   return selectedDoc !== null && open !== null ? (
@@ -254,25 +277,98 @@ const Doc = (props) => {
           </div>
         )}
 
-        <div style={{ marginLeft: "15%", marginTop: "30px" }}>
+        <React.Fragment>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-10 col-sm-offset-1">
+                <div class="page-header">
+                  <h3 class="reviews">Leave your comment</h3>
+                </div>
+                <div style={{ marginTop: "30px" }}>
+                  {/* <Form reply>
+                      <Form.TextArea
+                        onChange={(event) =>
+                          setWriteComment(event.target.value)
+                        }
+                      />
+                      <CommentButton
+                        content="Add Reply"
+                        labelPosition="left"
+                        icon="edit"
+                        primary
+                        onClick={() => onCommentHandler()}
+                      />
+                    </Form> */}
+                  <RichTextEditor value={value} onChange={onChange} />
+                  <CommentButton
+                    content="Add Reply"
+                    labelPosition="left"
+                    icon="edit"
+                    primary
+                    onClick={() => onCommentHandler()}
+                  />
+                </div>
+                <div class="comment-tabs">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="active">
+                      <a href="#comments-logout" role="tab" data-toggle="tab">
+                        <h4 class="reviews text-capitalize">Comments</h4>
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="comments-logout">
+                      <ul class="media-list">
+                        {comments.map((comment) => {
+                          return (
+                            <li class="media" key={comment._id}>
+                              <a class="pull-left" href="#">
+                                <img
+                                  class="media-object img-circle"
+                                  src={comment.by.imageUrl}
+                                  alt="profile"
+                                />
+                              </a>
+                              <div class="media-body">
+                                <div class="well well-lg">
+                                  <h4 class="media-heading text-uppercase reviews">
+                                    {comment.by.name}
+                                  </h4>
+                                  <ul class="media-date text-uppercase reviews list-inline">
+                                    <li class="dd">
+                                      {comment.date.slice(0, 10)}
+                                    </li>
+                                  </ul>
+                                  <p class="media-comment">{comment.text}</p>
+                                </div>
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </React.Fragment>
+      </div>
+    </React.Fragment>
+  ) : null;
+};
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+  };
+};
+
+export default connect(mapStateToProps)(Doc);
+{
+  /* <div style={{ marginLeft: "15%", marginTop: "30px" }}>
           <Comment.Group>
-            <Header as="h2" dividing>
-              Comments
-            </Header>
-            {comments.map((comment) => {
-              return (
-                <Comment key={comment._id}>
-                  <Comment.Avatar src={comment.by.imageUrl} />
-                  <Comment.Content>
-                    <Comment.Author as="a">{comment.by.name}</Comment.Author>
-                    <Comment.Metadata>
-                      <div>{comment.date}</div>
-                    </Comment.Metadata>
-                    <Comment.Text>{comment.text}</Comment.Text>
-                  </Comment.Content>
-                </Comment>
-              );
-            })}
+            
             <Form reply>
               <Form.TextArea
                 onChange={(event) => setWriteComment(event.target.value)}
@@ -286,16 +382,5 @@ const Doc = (props) => {
               />
             </Form>
           </Comment.Group>
-        </div>
-      </div>
-    </React.Fragment>
-  ) : null;
-};
-
-const mapStateToProps = (state) => {
-  return {
-    user: state.user.user,
-  };
-};
-
-export default connect(mapStateToProps)(Doc);
+        </div>*/
+}
